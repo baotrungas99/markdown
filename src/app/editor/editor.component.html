@@ -1,0 +1,21 @@
+<!-- <textarea #editor id="editor" [(ngModel)]="markdownText" (input)="updatePreview()" [appSyncScroll]="previewElement"></textarea> -->
+<!-- <div #editor id="editor" contenteditable="true" (input)="onInput($event)"  [appSyncScroll]="previewElement"></div> -->
+<!-- <div #editor id="editor" class="editor" contenteditable="true" (input)="onInput($event)"></div> -->
+<div
+  id="editor"
+
+  class="editor editor_content"
+
+  contenteditable="true"
+  (input)="onInput($event)"
+> 
+</div>
+<!-- <ngx-editor 
+id="editor"
+class="editor"
+[editor]="editor" 
+[(ngModel)]="markdownText"
+(ngModelChange)="updatePreview()"
+>
+</ngx-editor> -->
+<!-- <div class="preview" [innerHTML]="parsedHtml"></div> -->

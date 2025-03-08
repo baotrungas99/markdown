@@ -1,1 +1,93 @@
 /* You can add global styles to this file, and also import other style files */
+/* @import 'ckeditor5/ckeditor5.css'; */
+/* @import 'ckeditor5-premium-features/ckeditor5-premium-features.css'; */
+/* @import 'quill/dist/quill.snow.css'; */
+
+html, body {
+  height: 100%;
+  margin: 0; /* Loại bỏ margin mặc định */
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  overflow: hidden; /* Tắt cuộn cho body */
+}
+
+/* Style chung cho bảng */
+table {
+  width: 100%; /* Chiều rộng bảng */
+  border-collapse: collapse; /* Gộp viền của các ô */
+  margin: 20px 0; /* Khoảng cách bên ngoài bảng */
+  font-family: Arial, sans-serif; /* Font chữ */
+}
+
+/* Style cho tiêu đề bảng */
+thead {
+  background-color: #007BFF; /* Màu nền tiêu đề */
+  color: white; /* Màu chữ tiêu đề */
+}
+
+/* Style cho các ô trong tiêu đề */
+th {
+  padding: 12px; /* Khoảng cách bên trong ô tiêu đề */
+  text-align: left; /* Căn lề chữ */
+  border-bottom: 2px solid #ddd; /* Viền dưới tiêu đề */
+  border-right: 1px solid #ddd; /* Viền dọc giữa các cột */
+}
+
+/* Style cho các hàng trong phần thân bảng */
+tbody tr {
+  border-bottom: 1px solid #ddd; /* Viền dưới mỗi hàng */
+}
+
+/* Style cho các ô trong phần thân bảng */
+td {
+  padding: 10px; /* Khoảng cách bên trong ô */
+  text-align: left; /* Căn lề chữ */
+  border-right: 1px solid #ddd; /* Viền dọc giữa các cột */
+}
+
+/* Loại bỏ viền dọc của cột cuối cùng */
+th:last-child,
+td:last-child {
+  border-right: none; /* Không có viền dọc cho cột cuối cùng */
+}
+
+/* Hiệu ứng khi di chuột qua hàng */
+tbody tr:hover {
+  background-color: #f5f5f5; /* Màu nền khi di chuột qua */
+}
+
+/* Style cho hàng chẵn (striped rows) */
+tbody tr:nth-child(even) {
+  background-color: #f9f9f9; /* Màu nền cho hàng chẵn */
+}
+
+/* Style cho CKEditor */
+.ck-editor__editable {
+  min-height: 300px; /* Chiều cao tối thiểu của CKEditor */
+}
+
+/* Style cho thanh công cụ */
+mat-toolbar {
+  position: sticky; /* Dính vào vị trí khi cuộn */
+  top: 0; /* Đặt vị trí dính ở trên cùng */
+  z-index: 1000; /* Đảm bảo nó nằm trên các phần tử khác */
+}
+
+/* Style cho phần chính */
+/* h1::before, h2::before, h3::before, h4::before, h5::before, h6::before {
+  content: attr(data-prefix);
+  margin-right: 5px;
+  color: gray;
+} */
+
+/* [data-prefix]::before {
+  content: attr(data-prefix);
+  color: gray;
+  margin-right: 5px;
+}
+[data-suffix]::before {
+  content: attr(data-suffix);
+  color: gray;
+  margin-right: 5px;
+} */
+
+/* Styles for data-prefix (headings, blockquotes) */

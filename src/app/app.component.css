@@ -1,0 +1,54 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Style cho tiêu đề thanh công cụ */
+.toolbar-title {
+  font-size: x-large;
+  font-weight: 500;
+  margin: 10px;
+}
+
+/* Style cho container */
+.container {
+  display: flex;
+  flex: 1;
+  height: calc(100vh - 64px); /* Trừ chiều cao của thanh công cụ */
+}
+
+/* Style cho editor và preview */
+.editor, .preview {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto; /* Cuộn dọc */
+}
+
+/* Style cho textarea trong editor */
+.editor textarea {
+  width: 100%;
+  border: none;
+  outline: none;
+  resize: none; /* Không cho phép thay đổi kích thước */
+}
+
+/* Spacer */
+.spacer {
+  flex: 1 1 auto;
+}
+
+/* Style cho preview */
+.preview {
+  border-left: 1px solid #ccc; /* Đường viền giữa editor và preview */
+  background-color: #f3f3f3; /* Màu nền cho preview */
+}
+
+/* Style cho các phần tử khác */
+.katex {
+  font-size: 1.1em;
+}
+
+.mermaid {
+  font-size: 16px;
+}
