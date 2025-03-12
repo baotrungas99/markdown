@@ -154,3 +154,7 @@
    display: block;
    clear: both;
 }
+.md-syntax {
+  color: gray;
+  font-weight: bold;
+}

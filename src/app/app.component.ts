@@ -7,15 +7,17 @@ import { MatToolbarModule } from '@angular/material/toolbar'; // Import MatToolb
 import { MatIconModule } from '@angular/material/icon'; // Import MatIconModule (nếu sử dụng mat-icon)
 import { MatButtonModule } from '@angular/material/button'; // Import MatButtonModule (nếu sử dụng mat-button)
 import { FormsModule } from '@angular/forms';
-import { NgxEditorModule, Editor } from 'ngx-editor';
+// import { NgxEditorModule, Editor } from 'ngx-editor';
+import { Editor,mergeAttributes,Extension, Node, InputRule } from '@tiptap/core';
 import { SyncScrollDirective } from './sync-scroll.directive';
-
+import { TiptapEditorDirective,TiptapFloatingMenuDirective } from 'ngx-tiptap';
+import StarterKit from '@tiptap/starter-kit';
 // import Quill from 'quill';
 
 @Component({
   selector: 'app-root',
   standalone: true, // Khai báo component là standalone
-  imports: [RouterOutlet, CommonModule, EditorComponent, PreviewComponent, MatButtonModule, MatIconModule, MatToolbarModule, FormsModule, NgxEditorModule, SyncScrollDirective],
+  imports: [RouterOutlet, CommonModule, EditorComponent, PreviewComponent, MatButtonModule, MatIconModule, MatToolbarModule, FormsModule,TiptapEditorDirective , SyncScrollDirective],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -23,7 +25,12 @@ export class AppComponent implements OnDestroy {
   title = 'markdown';
   previewText: string = '';
   // quill!: Quill;
-  editor = new Editor();
+  editor = new Editor({
+    extensions: [
+      StarterKit.configure({ 
+        // heading: {levels: [1, 2, 3, 4, 5, 6]}, 
+      }),
+    ]});
   syncScrollEnabled = true;
 
   toggleSyncScroll() {

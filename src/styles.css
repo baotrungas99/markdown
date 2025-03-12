@@ -71,7 +71,22 @@ mat-toolbar {
   top: 0; /* Đặt vị trí dính ở trên cùng */
   z-index: 1000; /* Đảm bảo nó nằm trên các phần tử khác */
 }
+blockquote {
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding-left: 1.2em;
+  margin: 0;
+  border-left: 5px solid rgba(0, 0, 0, .1);
+}
 
+blockquote::before {
+  content: attr(data-prefix);
+  font-weight: bold;
+  color: gray;
+  line-height: 1;
+  margin-right: 5px;
+}
 /* Style cho phần chính */
 /* h1::before, h2::before, h3::before, h4::before, h5::before, h6::before {
   content: attr(data-prefix);
@@ -79,15 +94,25 @@ mat-toolbar {
   color: gray;
 } */
 
-/* [data-prefix]::before {
+[data-prefix]::before {
   content: attr(data-prefix);
   color: gray;
-  margin-right: 5px;
+  /* margin-right: 5px; */
 }
-[data-suffix]::before {
+[data-suffix]::after {
   content: attr(data-suffix);
   color: gray;
-  margin-right: 5px;
-} */
+  /* margin-right: 5px; */
+}
 
 /* Styles for data-prefix (headings, blockquotes) */
+.ProseMirror-focused {
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+.tiptap{
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
