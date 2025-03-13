@@ -18,8 +18,14 @@
   <button mat-icon-button (click)="editorComponent.formatText('underline')">
     <mat-icon>format_underlined</mat-icon>
   </button>
-  <button mat-icon-button (click)="toggleSyncScroll()">
-    <mat-icon>{{ syncScrollEnabled ? 'sync' : 'sync_disabled' }}</mat-icon>
+  <button mat-icon-button (click)="editorComponent.formatText('strike')">
+    <mat-icon>strikethrough_s</mat-icon>
+  </button>
+  <button mat-icon-button (click)="editorComponent.formatText('code')">
+    <mat-icon>code</mat-icon>
+  </button>
+  <button mat-icon-button (click)="editorComponent.formatText('blockquote')">
+    <mat-icon>format_quote</mat-icon>
   </button>
   <!-- <ngx-editor-menu [editor]="editor"></ngx-editor-menu> -->
   <tiptap-editor [editor]="editor"></tiptap-editor>
@@ -34,17 +40,36 @@
   </button>
 </mat-toolbar>
 <main>
-  <div class="container">
-    <div class="editor" #editorDiv [appSyncScroll]="previewDiv" [syncEnabled]="syncScrollEnabled">
-      <app-editor #editorComponent (previewTextChange)="previewText = $event" ></app-editor>
+  <div class="container" [class.fullscreen]="isFullScreen">
+    <div
+      class="editor"
+      #editorDiv
+      [appSyncScroll]="previewDiv"
+      [syncEnabled]="syncScrollEnabled"
+    >
+      <app-editor
+        #editorComponent
+        (previewTextChange)="previewText = $event"
+      ></app-editor>
     </div>
-    <div class="preview"  #previewDiv [appSyncScroll]="editorDiv" [syncEnabled]="syncScrollEnabled">
+    <div class="button-bar">
+      <button class="sync-scroll" mat-icon-button (click)="toggleSyncScroll()">
+        <mat-icon>{{ syncScrollEnabled ? "sync" : "sync_disabled" }}</mat-icon>
+      </button>
+      <button mat-icon-button (click)="toggleFullScreen()">
+        <mat-icon>{{ isFullScreen ? 'edit' : 'visibility' }}</mat-icon>
+      </button>
+    </div>
+    <div
+      class="preview"
+      #previewDiv
+      [appSyncScroll]="editorDiv"
+      [syncEnabled]="syncScrollEnabled"
+    >
       <app-preview #preview [previewText]="previewText"></app-preview>
     </div>
   </div>
 </main>
-
-
 
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 <!-- * * * * * * * * * * * The content above * * * * * * * * * * * * -->

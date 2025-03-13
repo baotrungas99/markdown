@@ -24,6 +24,8 @@ import StarterKit from '@tiptap/starter-kit';
 export class AppComponent implements OnDestroy {
   title = 'markdown';
   previewText: string = '';
+  syncScrollEnabled = true;
+  isFullScreen = false;
   // quill!: Quill;
   editor = new Editor({
     extensions: [
@@ -31,7 +33,6 @@ export class AppComponent implements OnDestroy {
         // heading: {levels: [1, 2, 3, 4, 5, 6]}, 
       }),
     ]});
-  syncScrollEnabled = true;
 
   toggleSyncScroll() {
     this.syncScrollEnabled = !this.syncScrollEnabled;
@@ -50,5 +51,9 @@ export class AppComponent implements OnDestroy {
     a.download = 'document.md';
     a.click();
     window.URL.revokeObjectURL(url);
+  }
+  toggleFullScreen() {
+    this.isFullScreen = !this.isFullScreen;
+    // console.log('Full Screen State:', this.isFullScreen);
   }
 }

@@ -1,0 +1,11 @@
+#preview h1,
+#preview h2,
+#preview h3,
+#preview h4,
+#preview h5,
+#preview h6 {
+  display: block; /* Ensure headings are block-level */
+  clear: both;    /* Clear any floats */
+  border-bottom: 1px solid hsla(0, 0%, 50%, .33);
+  line-height: 1.33;
+}

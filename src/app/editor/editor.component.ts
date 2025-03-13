@@ -117,41 +117,31 @@ export class EditorComponent implements OnDestroy {
   // }
 
   formatText(command: string) {
-    const selection = window.getSelection();
-    if (selection && selection.rangeCount > 0) {
-      const range = selection.getRangeAt(0);
-      const selectedText = range.toString();
-      if (!selectedText) return;
-
-      let formattedText = selectedText;
-
-      if (command === 'bold') {
-        if (selectedText.startsWith('**') && selectedText.endsWith('**')) {
-          formattedText = selectedText.slice(0, 0);
-        } else {
-          formattedText = `**${selectedText}**`;
-        }
-      } else if (command === 'italic') {
-        if (selectedText.startsWith('*') && selectedText.endsWith('*')) {
-          formattedText = selectedText.slice(0, 0);
-        } else {
-          formattedText = `${selectedText}`;
-        }
-      } else if (command === 'underline') {
-        if (selectedText.startsWith('<ins>') && selectedText.endsWith('</ins>')) {
-          formattedText = selectedText.replace(/^<ins>(.*?)<\/ins>$/, '$1');
-        } else {
-          formattedText = `<ins>${selectedText}</ins>`;
-        }
-      }
-
-      range.deleteContents();
-      range.insertNode(document.createTextNode(formattedText));
-
-      this.markdownText = (document.querySelector('.editor') as HTMLElement).innerText;
-      // this.updatePreview();
-      this.previewTextChange.emit(this.markdownText);
-
+    if (!this.editor) return;
+  
+    switch (command) {
+      case 'bold':
+        this.editor.chain().focus().toggleBold().run();
+        break;
+      case 'italic':
+        this.editor.chain().focus().toggleItalic().run();
+        break;
+      // case 'underline':
+      //   this.editor.chain().focus().toggleUnderline().run();
+      //   break;
+      case 'strike':
+        this.editor.chain().focus().toggleStrike().run();
+        break;
+      case 'code':
+        this.editor.chain().focus().toggleCode().run();
+        break;
+      case 'blockquote':
+        this.editor.chain().focus().toggleBlockquote().run();
+        break;
     }
+  
+    // Cập nhật markdownText
+    this.markdownText = this.editor.storage['markdown'].getMarkdown();
+    this.previewTextChange.emit(this.markdownText);
   }
 }

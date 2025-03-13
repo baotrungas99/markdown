@@ -16,13 +16,18 @@
   display: flex;
   flex: 1;
   height: calc(100vh - 64px); /* Trừ chiều cao của thanh công cụ */
+  flex-direction: row;
+  transition: all 0.3s ease-in-out;
 }
 
 /* Style cho editor và preview */
 .editor, .preview {
   flex: 1;
   padding: 10px;
-  overflow-y: auto; /* Cuộn dọc */
+  overflow-y: auto;
+  overflow-x: hidden;
+  white-space: break-spaces;
+  transition: all 0.3s ease-in-out;
 }
 
 /* Style cho textarea trong editor */
@@ -51,4 +56,59 @@
 
 .mermaid {
   font-size: 16px;
+}
+.button-bar{
+  background-color: #f3f3f3;
+  display: flex;
+  flex-direction: column; /* Xếp các phần tử theo chiều dọc */
+  align-items: center;
+}
+/* Nếu đường viền là của div chứa */
+div {
+  border: none !important;
+}
+
+/* Nếu đường viền là của container có thanh cuộn */
+.scroll-container {
+  border: none !important;
+  outline: none !important; /* Nếu có outline */
+}
+
+/* Nếu đường viền là của thanh cuộn (trong trình duyệt Chrome) */
+::-webkit-scrollbar {
+  width: 8px; /* Điều chỉnh độ rộng thanh cuộn */
+}
+
+::-webkit-scrollbar-track {
+  background: transparent; /* Loại bỏ background của thanh cuộn */
+  border: none; /* Xóa border nếu có */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #aaa; /* Màu của thanh cuộn */
+  border: none; /* Đảm bảo không có viền */
+}
+/* Khi bật fullscreen, ẩn editor và mở rộng preview */
+/* .editor, .preview {
+  flex: 1;
+  transition: all 0.3s ease;
+} */
+.fullscreen {
+  display: flex;
+  flex-direction: row-reverse !important;
+}
+.fullscreen .editor {
+  display: none;
+}
+.fullscreen .preview {
+  padding: 10px 244px 254px;
+}
+.fullscreen .sync-scroll {
+  display: none;
+}
+.fullscreen .button-bar {
+  position: absolute;
+  display: flex;
+  /* justify-content: space-between; */
+  padding: 8px;
 }
