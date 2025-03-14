@@ -1,17 +1,20 @@
 import { Component, Output, EventEmitter, OnInit, OnDestroy, Input, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 import * as marked from 'marked';
 // import { QuillModule } from 'ngx-quill';
 // import { CodemirrorModule } from 'ngx-codemirror';
 // import { NgxEditorModule, Editor } from 'ngx-editor';
-import { Headingreserve, BoldPreserve, StrikePreserve, ItalicPreserve, CodePreserve, HighlightPreserve ,QuotePreserve} from "../tiptapExtension/TipTapExtension.component";
+import { Headingreserve, BoldPreserve, StrikePreserve, ItalicPreserve, CodePreserve, HighlightPreserve, QuotePreserve } from "../tiptapExtension/TipTapExtension.component";
 import DOMPurify from 'dompurify';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { LMarkdownEditorModule } from 'ngx-markdown-editor';
 import { Editor, mergeAttributes, Extension, Node, InputRule } from '@tiptap/core';
 import { TextSelection } from "prosemirror-state";
 import StarterKit from '@tiptap/starter-kit';
+import { Markdown } from 'tiptap-markdown';
+
 //không dùng StarterKit
 import Paragraph from "@tiptap/extension-paragraph";
 import Text from "@tiptap/extension-text";
@@ -21,7 +24,6 @@ import Italic from "@tiptap/extension-italic";
 import Blockquote from "@tiptap/extension-blockquote";
 import Code from "@tiptap/extension-code";
 import Document from "@tiptap/extension-document";
-import { Markdown } from 'tiptap-markdown';
 import { Highlight } from '@tiptap/extension-highlight';
 import { TiptapEditorDirective } from 'ngx-tiptap';
 
@@ -32,73 +34,83 @@ import { TiptapEditorDirective } from 'ngx-tiptap';
   templateUrl: './editor.component.html',
   styleUrls: ['./editor.component.css'],
 })
-export class EditorComponent implements OnDestroy {
-  markdownText: string = '';
+export class EditorComponent implements OnDestroy, OnInit {
+  inputText: string = '';
   editor!: Editor;
   // @Input() editor!: Editor ;
-  previewContent: string = '';
-  @Output() previewTextChange = new EventEmitter<string>();
+  // previewContent: string = '';
+  @Output() editorOutputText = new EventEmitter<string>();
   @ViewChild('editorComponent') editorElement!: ElementRef;
   // @ViewChild('editor', { static: true }) editor!: ElementRef<HTMLDivElement>;
   // editor!: Editor;
-
-  constructor(private elRef: ElementRef) { }
+  constructor(private elRef: ElementRef, private http: HttpClient) { }
 
   ngOnInit() {
+    this.http.get('placehoder.txt', { responseType: 'text' }).subscribe(
+      data => {
+        this.inputText = data; // Gán dữ liệu sau khi tải xong
+        this.initEditor(); // Chỉ khởi tạo Editor khi có dữ liệu
+      },
+      error => console.error('Không thể tải file:', error)
+    );
+  }
+  
+  initEditor() {
     this.editor = new Editor({
+      
       extensions: [
-        StarterKit,
+        StarterKit.configure({heading: false, blockquote:false}),
         Markdown.configure({
-          html: true,                  // Allow HTML input/output
-          tightLists: true,            // No <p> inside <li> in markdown output
-          tightListClass: 'tight',     // Add class to <ul> allowing you to remove <p> margins when tight
-          bulletListMarker: '-',       // <li> prefix in markdown output
-          linkify: true,              // Create links from "https://..." text
-          breaks: true,               // New lines (\n) in markdown input are converted to <br>
-          transformPastedText: false,  // Allow to paste markdown text in the editor
-          transformCopiedText: false,  // Copied text is transformed to markdown
+          html: true,
+          tightLists: false,
+          bulletListMarker: '-',
+          linkify: true,
+          breaks: true,
+          transformCopiedText:false,
+          transformPastedText: false,
         }),
-        Headingreserve,
-        BoldPreserve,
-        ItalicPreserve,
-        StrikePreserve,
-        CodePreserve,
-        HighlightPreserve,
-        QuotePreserve
+        Headingreserve, BoldPreserve, StrikePreserve, ItalicPreserve, CodePreserve, HighlightPreserve, QuotePreserve
       ],
-
-      content: this.markdownText,
-
+      content: this.inputText,
     });
-
+    this.attachEditorToDOM();
     this.editor.on('update', ({ editor }) => {
-      this.markdownText = editor.storage['markdown'].getMarkdown();
-      this.previewTextChange.emit(this.markdownText);
-      // this.updatePreview();
+      this.inputText = editor.storage['markdown'].getMarkdown();
+      this.editorOutputText.emit(this.inputText);
     });
   }
-
-  ngAfterViewInit() {
+  
+  attachEditorToDOM() {
     const container = this.elRef.nativeElement.querySelector("#editor");
-    if (container) {
+    if (container && this.editor) {
       container.appendChild(this.editor.view.dom);
+      this.editor.commands.focus();
+      this.editorOutputText.emit(this.inputText);
     }
-    this.editor.commands.focus();
   }
+
+  // ngAfterViewInit() {
+  //   const container = this.elRef.nativeElement.querySelector("#editor");
+  //   if (container) {
+  //     container.appendChild(this.editor.view.dom);
+  //   }
+  //   this.editor.commands.focus();
+  //   this.editorOutputText.emit(this.inputText);
+  // }
 
   ngOnDestroy() {
     this.editor.destroy();
   }
 
   // onInput(event: Event) {
-    // this.markdownText = (event.target as HTMLElement).innerText;
-    // this.updatePreview();
-    // this.markdownText = this.convertMarkdownToHtml(this.markdownText);
+  // this.inputText = (event.target as HTMLElement).innerText;
+  // this.updatePreview();
+  // this.inputText = this.convertMarkdownToHtml(this.inputText);
   // }
 
   // async updatePreview() {
-  //   // this.markdownText = await marked.parse(this.markdownText);
-  //   this.previewTextChange.emit(this.markdownText);
+  //   // this.inputText = await marked.parse(this.inputText);
+  //   this.editorOutputText.emit(this.inputText);
   // }
 
   // convertMarkdownToHtml(text: string): string {
@@ -118,7 +130,7 @@ export class EditorComponent implements OnDestroy {
 
   formatText(command: string) {
     if (!this.editor) return;
-  
+
     switch (command) {
       case 'bold':
         this.editor.chain().focus().toggleBold().run();
@@ -139,9 +151,9 @@ export class EditorComponent implements OnDestroy {
         this.editor.chain().focus().toggleBlockquote().run();
         break;
     }
-  
-    // Cập nhật markdownText
-    this.markdownText = this.editor.storage['markdown'].getMarkdown();
-    this.previewTextChange.emit(this.markdownText);
+
+    // Cập nhật inputText
+    this.inputText = this.editor.storage['markdown'].getMarkdown();
+    this.editorOutputText.emit(this.inputText);
   }
 }

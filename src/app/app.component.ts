@@ -1,4 +1,4 @@
-import { Component, OnDestroy, ViewChild, ElementRef, Output } from '@angular/core';
+import { Component, OnDestroy, ViewChild, ElementRef, Output, HostListener, computed} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { EditorComponent } from './editor/editor.component'; // Import EditorComponent
@@ -10,41 +10,57 @@ import { FormsModule } from '@angular/forms';
 // import { NgxEditorModule, Editor } from 'ngx-editor';
 import { Editor,mergeAttributes,Extension, Node, InputRule } from '@tiptap/core';
 import { SyncScrollDirective } from './sync-scroll.directive';
-import { TiptapEditorDirective,TiptapFloatingMenuDirective } from 'ngx-tiptap';
-import StarterKit from '@tiptap/starter-kit';
+// import { TiptapEditorDirective,TiptapFloatingMenuDirective } from 'ngx-tiptap';
+// import StarterKit from '@tiptap/starter-kit';
 // import Quill from 'quill';
 
 @Component({
   selector: 'app-root',
   standalone: true, // Khai báo component là standalone
-  imports: [RouterOutlet, CommonModule, EditorComponent, PreviewComponent, MatButtonModule, MatIconModule, MatToolbarModule, FormsModule,TiptapEditorDirective , SyncScrollDirective],
+  imports: [RouterOutlet, CommonModule, EditorComponent, PreviewComponent, MatButtonModule, MatIconModule, MatToolbarModule, FormsModule , SyncScrollDirective],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent implements OnDestroy {
+export class AppComponent {
   title = 'markdown';
-  previewText: string = '';
+  mdText: string = '';
   syncScrollEnabled = true;
   isFullScreen = false;
-  // quill!: Quill;
-  editor = new Editor({
-    extensions: [
-      StarterKit.configure({ 
-        // heading: {levels: [1, 2, 3, 4, 5, 6]}, 
-      }),
-    ]});
 
+  // wordCount = computed(() => this.mdText.trim().split(/\s+/).filter(word => word).length);
+  // charCount = computed(() => this.mdText.length);
+  // lineCount = computed(() => this.mdText.split(/\n/).length);
+  // paragraphCount = computed(() => this.mdText.split(/\n\s*\n/).filter(p => p).length);
+
+  get wordCount() {
+    return this.mdText.trim().split(/\s+/).filter(word => word).length;
+  }
+  get charCount() {
+    return this.mdText.length;
+  }
+  get lineCount() {
+    return this.mdText.split(/\n/).length;
+  }
+  get paragraphCount() {
+    return this.mdText.split(/\n\s*\n/).filter(p => p).length;
+  }
+  // ngOnInit(){
+  //   const scrollPosition = localStorage.getItem('scrollPosition');
+  //   if (scrollPosition) {
+  //     window.scrollTo(0, Number(scrollPosition));
+  //   }
+  // }
   toggleSyncScroll() {
     this.syncScrollEnabled = !this.syncScrollEnabled;
     // console.log('Sync Scroll State:', this.syncScrollEnabled);
   }
 
   ngOnDestroy(): void {
-    this.editor.destroy();
+    // this.editor.destroy();
   }
-
   saveContent() {
-    const blob = new Blob([this.previewText], { type: 'text/markdown' });
+    // console.log(this.charCount(),this.wordCount(),this.lineCount(),this.paragraphCount());
+    const blob = new Blob([this.mdText], { type: 'text/markdown' });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -56,4 +72,10 @@ export class AppComponent implements OnDestroy {
     this.isFullScreen = !this.isFullScreen;
     // console.log('Full Screen State:', this.isFullScreen);
   }
+  
+  // @HostListener('window:beforeunload', ['$event'])
+  // saveScrollPosition() {
+  //   // Lưu vị trí cuộn trước khi reload hoặc chuyển trang
+  //   localStorage.setItem('scrollPosition', String(window.scrollY));
+  // }
 }

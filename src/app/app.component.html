@@ -28,7 +28,7 @@
     <mat-icon>format_quote</mat-icon>
   </button>
   <!-- <ngx-editor-menu [editor]="editor"></ngx-editor-menu> -->
-  <tiptap-editor [editor]="editor"></tiptap-editor>
+  <!-- <tiptap-editor [editor]="editor"></tiptap-editor> -->
   <button mat-icon-button (click)="saveContent()">
     <mat-icon>save</mat-icon>
   </button>
@@ -49,7 +49,7 @@
     >
       <app-editor
         #editorComponent
-        (previewTextChange)="previewText = $event"
+        (editorOutputText)="mdText = $event"
       ></app-editor>
     </div>
     <div class="button-bar">
@@ -66,11 +66,11 @@
       [appSyncScroll]="editorDiv"
       [syncEnabled]="syncScrollEnabled"
     >
-      <app-preview #preview [previewText]="previewText"></app-preview>
+      <app-preview #preview [previewText]="mdText"></app-preview>
     </div>
   </div>
 </main>
-
+<div class="panel">Markdown {{ wordCount }} words {{ charCount }} character {{ lineCount }} lines {{ paragraphCount }} paragraphs</div>
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 <!-- * * * * * * * * * * * The content above * * * * * * * * * * * * -->
 <!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * * -->

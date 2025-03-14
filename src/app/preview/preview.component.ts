@@ -16,17 +16,14 @@ import { markdownItTable } from 'markdown-it-table';
 })
 export class PreviewComponent implements OnChanges, AfterViewInit { 
 
-  @Input() previewText: string = '';
-  renderedText: string = ''; // Biến lưu HTML đã render
-  mermaidInitialized: boolean = false; 
-  private md = new MarkdownIt({ html: true, breaks: true });
+  @Input() previewText: string = ''; //lấy editor output
+  renderedText: string = ''; // Biến lưu html md render
+  // mermaidInitialized: boolean = false; 
+  private md = new MarkdownIt({ html: true, breaks: true ,linkify: true, });
 
   @ViewChild('preview') previewElement!: ElementRef;
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['previewText'] && changes['previewText'].currentValue) {
-      this.renderFullMarkdown();
-    }
     if (changes['previewText']) {
       if (!this.previewText.trim()) { 
         this.renderedText = '';  // Nếu input rỗng, xóa nội dung hiển thị
@@ -37,27 +34,33 @@ export class PreviewComponent implements OnChanges, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    console.log(this.previewText);
     mermaid.initialize({ startOnLoad: true });
-    this.mermaidInitialized = true;
+    this.renderFullMarkdown();
+    // this.mermaidInitialized = true;
   }
 
   renderFullMarkdown() {
-
-    let cleanText = this.previewText.replace(/(\|.*\|)(\s*\n)+(\|[-:| ]+\|)(\s*\n)+((\|.*\|\s*\n)*)/g, (match) => {
-      // Xóa khoảng trắng thừa trong bảng
-      return match.replace(/\s*\n\s*/g, '\n').trim();
-    });;
+    let cleanText = this.previewText.replace(
+      /(\|.*\|)\n+(\|[-:| ]+\|)\n+((\|.*\|\n*)+)(?=\n[^|]|\n*$)/gi,
+      (match) => {
+        return match.replace(/\s*\n\s*/g, '\n').trim();
+      }
+    ).replace(/\\\[/g, '[').replace(/\\\]/g, ']').replace(/\\\*/g, '*');
+    // console.log(cleanText);
     // let html = await marked.parse(cleanText);
     let html = this.md.render(cleanText); // 1. Render Markdown
     // console.log(html);
     html = this.renderKaTeX(html);               // 2. Render KaTeX
     html = this.renderMermaid(html);             // 3. Render Mermaid
+    // Loại bỏ thẻ <p> trong <li>
+    html = html.replace(/<li>\s*<p>(.*?)<\/p>\s*/g, '<li>$1');
     this.renderedText = DOMPurify.sanitize(html);// 4. Sanitize kết quả cuối
   }
  
   renderKaTeX(html: string): string {
     html = html.replace(/\$\$\s*([\s\S]*?)\s*\$\$/g, (_, equation) => {
-      try {
+      try { //block mode canh giữa (xử lý trong $$...$$)
         let cleanEquation = equation.replace(/<\/?p>/g, ''); // Xóa thẻ <p> chỉ trong KaTeX
         return `<div class="katex-block">${katex.renderToString(cleanEquation.trim(), { throwOnError: false, displayMode: true })}</div>`;
       } catch (error) {
@@ -67,7 +70,7 @@ export class PreviewComponent implements OnChanges, AfterViewInit {
     });
 
     html = html.replace(/(?<!\\)\$(.*?)\$/g, (_, equation) => {
-      try {
+      try { //inline mode trên cùng dòng (xử lý trong $...$)
         let cleanEquation = equation.replace(/<\/?p>/g, ''); // Xóa thẻ <p> chỉ trong KaTeX inline
         return `<span class="katex-inline">${katex.renderToString(cleanEquation.trim(), { throwOnError: false, displayMode: false })}</span>`;
       } catch (error) {
@@ -98,4 +101,5 @@ export class PreviewComponent implements OnChanges, AfterViewInit {
 
     return html;
   }
+  
 }

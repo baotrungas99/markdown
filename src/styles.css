@@ -8,7 +8,8 @@ html, body {
   height: 100%;
   margin: 0; /* Loại bỏ margin mặc định */
   font-family: Roboto, "Helvetica Neue", sans-serif;
-  overflow: hidden; /* Tắt cuộn cho body */
+  overflow-y: hidden;
+  position: relative;
 }
 
 /* Style chung cho bảng */
@@ -116,4 +117,13 @@ blockquote::before {
   border: none !important;
   outline: none !important;
   box-shadow: none !important;
+}
+.panel{
+  display: flex;
+  position: sticky;
+  bottom: 0;
+  z-index: 1000;
+  background-color: #007BFF;
+  color: aliceblue;
+  font-size: smaller;
 }
