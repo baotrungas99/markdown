@@ -27,8 +27,9 @@
   padding: 10px;
   overflow-y: auto;
   overflow-x: hidden;
-  white-space: pre-wrap;;
+  white-space: normal;
   transition: all 0.3s ease-in-out;
+  line-height: 2;
 }
 
 /* Style cho textarea trong editor */
