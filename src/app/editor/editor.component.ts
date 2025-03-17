@@ -40,7 +40,7 @@ export class EditorComponent implements OnDestroy, OnInit {
   // @Input() editor!: Editor ;
   // previewContent: string = '';
   @Output() editorOutputText = new EventEmitter<string>();
-  @ViewChild('editorComponent') editorElement!: ElementRef;
+  // @ViewChild('editorComponent') editorElement!: ElementRef;
   // @ViewChild('editor', { static: true }) editor!: ElementRef<HTMLDivElement>;
   // editor!: Editor;
   constructor(private elRef: ElementRef, private http: HttpClient) { }
